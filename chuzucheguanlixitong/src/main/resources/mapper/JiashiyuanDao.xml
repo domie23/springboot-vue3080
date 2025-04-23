@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.JiashiyuanDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.username as username
+        ,a.password as password
+        ,a.jiashiyuan_name as jiashiyuanName
+        ,a.jiashiyuan_phone as jiashiyuanPhone
+        ,a.jiashiyuan_id_number as jiashiyuanIdNumber
+        ,a.jiashiyuan_photo as jiashiyuanPhoto
+        ,a.age as age
+        ,a.jiashiyuan_jialing as jiashiyuanJialing
+        ,a.sex_types as sexTypes
+        ,a.jiashiyuan_fuwuzigezheng_photo as jiashiyuanFuwuzigezhengPhoto
+        ,a.jiashiyuan_email as jiashiyuanEmail
+        ,a.jiashiyuan_address as jiashiyuanAddress
+        ,a.jiashiyuan_huji_address as jiashiyuanHujiAddress
+        ,a.create_time as createTime
+    </sql>
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.JiashiyuanView" >
+        SELECT
+        <include refid="Base_Column_List" />
+
+--         级联表的字段
+
+        FROM jiashiyuan  a
+
+        <where>
+            <if test="params.ids != null">
+                and a.id in
+                <foreach item="item" index="index" collection="params.ids" open="(" separator="," close=")">
+                #{item}
+                </foreach>
+            </if>
+            <if test=" params.username != '' and params.username != null and params.username != 'null' ">
+                and a.username like CONCAT('%',#{params.username},'%')
+            </if>
+            <if test=" params.password != '' and params.password != null and params.password != 'null' ">
+                and a.password like CONCAT('%',#{params.password},'%')
+            </if>
+            <if test=" params.jiashiyuanName != '' and params.jiashiyuanName != null and params.jiashiyuanName != 'null' ">
+                and a.jiashiyuan_name like CONCAT('%',#{params.jiashiyuanName},'%')
+            </if>
+            <if test=" params.jiashiyuanPhone != '' and params.jiashiyuanPhone != null and params.jiashiyuanPhone != 'null' ">
+                and a.jiashiyuan_phone like CONCAT('%',#{params.jiashiyuanPhone},'%')
+            </if>
+            <if test=" params.jiashiyuanIdNumber != '' and params.jiashiyuanIdNumber != null and params.jiashiyuanIdNumber != 'null' ">
+                and a.jiashiyuan_id_number like CONCAT('%',#{params.jiashiyuanIdNumber},'%')
+            </if>
+            <if test="params.ageStart != null and params.ageStart != ''">
+                <![CDATA[  and a.age >= #{params.ageStart}   ]]>
+            </if>
+            <if test="params.ageEnd != null and params.ageEnd != ''">
+                <![CDATA[  and a.age <= #{params.ageEnd}   ]]>
+            </if>
+             <if test="params.age != null and params.age != ''">
+                and a.age = #{params.age}
+             </if>
+            <if test=" params.jiashiyuanJialing != '' and params.jiashiyuanJialing != null and params.jiashiyuanJialing != 'null' ">
+                and a.jiashiyuan_jialing like CONCAT('%',#{params.jiashiyuanJialing},'%')
+            </if>
+            <if test="params.sexTypes != null and params.sexTypes != ''">
+                and a.sex_types = #{params.sexTypes}
+            </if>
+            <if test=" params.jiashiyuanEmail != '' and params.jiashiyuanEmail != null and params.jiashiyuanEmail != 'null' ">
+                and a.jiashiyuan_email like CONCAT('%',#{params.jiashiyuanEmail},'%')
+            </if>
+            <if test=" params.jiashiyuanAddress != '' and params.jiashiyuanAddress != null and params.jiashiyuanAddress != 'null' ">
+                and a.jiashiyuan_address like CONCAT('%',#{params.jiashiyuanAddress},'%')
+            </if>
+            <if test=" params.jiashiyuanHujiAddress != '' and params.jiashiyuanHujiAddress != null and params.jiashiyuanHujiAddress != 'null' ">
+                and a.jiashiyuan_huji_address like CONCAT('%',#{params.jiashiyuanHujiAddress},'%')
+            </if>
+
+        </where>
+
+        order by a.${params.orderBy} desc 
+    </select>
+
+</mapper>
